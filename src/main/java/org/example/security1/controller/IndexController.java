@@ -1,12 +1,22 @@
 package org.example.security1.controller;
 
+import org.example.security1.model.User;
+import org.example.security1.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller //view를 리턴하겠다.
 public class IndexController {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     //머스테치 사용
     @GetMapping({"","/"})
     public String index(){
@@ -30,16 +40,30 @@ public class IndexController {
         return "manager";
 
     }
+    @GetMapping("/loginForm")
+    public String loginForm(){
+        return "loginForm";
 
+    }
     @GetMapping("/login")
     public String login(){
         return "login";
 
     }
 
-    @GetMapping("/join")
-    public String join(){
-        return "join";
+
+    @GetMapping("/joinForm")
+    public String joinForm(){
+        return "joinForm";
+
+    }
+    @PostMapping("/join")
+    public String join(User user){
+        user.setRole("ROLE_USER");
+        //패스워드 암호화 해주어지만 시큐리티로 접속 가능
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return "redirect:/loginForm";
 
     }
 

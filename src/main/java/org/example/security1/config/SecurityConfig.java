@@ -5,12 +5,19 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     //여기에 작성할것들이 필터가 된다 기존에 작성한것을 체인지 한다.
+
+    //해당 메서드의 리턴되는 오브젝트를 ioc로 등록해준다 bean dms
+    @Bean
+    public BCryptPasswordEncoder encodePwd(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,7 +36,8 @@ public class SecurityConfig {
 
                 //로그인페이지
                 .formLogin((login)->{
-                    login.loginPage("/login");
+                    login.loginPage("/loginForm");
+
                 })
 
 
