@@ -1,5 +1,7 @@
 package org.example.security1.config;
 
+import org.example.security1.oauth.PrincipalOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +16,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true,prePostEnabled = true) //securedEnabled 활성화
 public class SecurityConfig {
+
+    @Autowired
+    private PrincipalOauth2UserService oauthUser;
+
     //여기에 작성할것들이 필터가 된다 기존에 작성한것을 체인지 한다.
+
 
     //해당 메서드의 리턴되는 오브젝트를 ioc로 등록해준다 bean dms
     @Bean
@@ -45,6 +52,16 @@ public class SecurityConfig {
                     login.defaultSuccessUrl("/");
 
                 })
+
+                .oauth2Login((oauth)->{
+                    oauth.loginPage("/loginForm");
+                    //엑세스 토큰 +사용자 프로필 정보를  리턴한다
+                    oauth.userInfoEndpoint(user ->{
+                            user.userService(oauthUser);
+                    });
+
+                })
+
 
 
                 .build();
