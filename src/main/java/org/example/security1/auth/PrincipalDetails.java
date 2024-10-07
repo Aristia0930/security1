@@ -9,21 +9,38 @@ package org.example.security1.auth;
 
 //이걸해주면 userDetails 객체를 만드는거다 이거 다음으로는
 //Authentication 를 만들어야 한다.
+import lombok.Data;
 import org.example.security1.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+@Data
+public class PrincipalDetails implements UserDetails,OAuth2User {
     private User user;
+    private Map<String, Object> attributes;
 
     //생성자
+    //일반 로그인할때 사용
     public PrincipalDetails (User user){
         this.user=user;
     }
+    //oauth로그인 사용
+    public PrincipalDetails (User user,Map<String, Object> attributes){
+        this.user=user;
+        this.attributes=attributes;
+    }
 
+
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     //해당 유저의 권한을 리턴하는 곳
     @Override
@@ -69,5 +86,10 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
