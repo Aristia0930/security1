@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-
+@NoArgsConstructor
 @Entity
 @Data
 public class User {
@@ -29,4 +30,6 @@ public class User {
         this.role = role;
         this.createDate = createDate;
     }
+
+
 }
