@@ -4,6 +4,7 @@ import org.example.security1.auth.PrincipalDetails;
 import org.example.security1.model.User;
 import org.example.security1.oauth.provider.FacebookUserInfo;
 import org.example.security1.oauth.provider.GoogleUserInfo;
+import org.example.security1.oauth.provider.NaverUserInfo;
 import org.example.security1.oauth.provider.OAuth2UserInfo;
 import org.example.security1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -60,8 +62,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 //            id = oAuth2User.getAttribute("id");
 //            email = oAuth2User.getAttribute("email");
 //            username = "facebook" + id;
-        }
-        else{
+        } else if (Objects.equals(provider, "naver")) {
+            oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+            
+        } else{
             System.out.println("잘못된 정보가 들어왔음");
         }
 
